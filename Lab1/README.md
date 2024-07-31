@@ -1,4 +1,4 @@
-# Financial Engineering Assignment 1
+# Financial Engineering - Assignment 1
 
 This assignment for the Financial Engineering course at Politecnico Milano focuses on pricing a European Call Option with specific market parameters.
 The task involves using various methods to determine the option's price and analyzing the results to understand the behavior and accuracy of these methods.
