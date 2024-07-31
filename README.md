@@ -1,9 +1,6 @@
-# Financial Engineering Assignment 1
-
-This assignment for the Financial Engineering course focuses on pricing an European Call Option with specific market parameters. 
-The task involves using various methods to determine the option's price and analyzing the results to understand the behavior and accuracy of these methods.
-The assignment begins with pricing the option using the `blkprice` function in Matlab, a Cox-Ross-Rubinstein (CRR) binomial tree approach, and a Monte-Carlo (MC) simulation. 
-It then examines the numerical errors associated with the CRR and MC methods, demonstrating how these errors scale with the number of intervals or simulations.
-Additionally, the assignment includes pricing a European Call Option with a barrier using both tree and MC techniques, and comparing these results with a closed-form solution if available. 
-The Vega of the barrier option is analyzed across a range of underlying prices to study its sensitivity to volatility.
-Optional tasks explore advanced topics such as the impact of using antithetic variables to reduce MC error, pricing Bermudan options with multiple exercise opportunities, and comparing prices with varying dividend yields.
+Financial Engineering Course Projects - Spring 2024
+This repository contains the projects proposed and developed during the Financial Engineering course for Spring 2024. The projects are categorized into three main types:
+- Lab Folders: These folders include laboratory projects focusing on mathematical models for finance, pricing models, and related topics.
+- LabRM Folders: These folders contain projects related to risk management.
+- LabEPFL Folders: These folders encompass projects on electricity price and load forecasting models.
+Each folder contains detailed documentation and code implementations for the respective projects.
