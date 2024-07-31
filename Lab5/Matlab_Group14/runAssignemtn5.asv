@@ -1,0 +1,101 @@
+%% ASSIGNMENT 5
+%
+% GROUP 15
+%
+%
+clear;
+clc;
+
+%% Settings
+formatData='dd/mm/yyyy';
+
+%% Read Market Data
+if ispc()   % Windows version
+    [datesSet, ratesSet] = readExcelData('MktData_CurveBootstrap.xls', formatData);
+else        % MacOS version
+    [datesSet, ratesSet] = readExcelDataMacOS('MktData_CurveBootstrap.xls');
+end
+
+%% Bootstrap
+
+% Get dates, discount factors and rates (EURIBOR) from the market
+[dates, discounts]=bootstrap(datesSet, ratesSet);
+zRates = zeroRates(dates, discounts);
+
+% Set the Settlement Date 
+% Set date = "19/02/2008"
+SetDate = dates(1);
+% Fix date1 since it is not present in the bootstrap
+Date1 = datenum(2009,02,19);
+
+% Find the discount factors for the "fixed leg": 
+% Compute the one referred to date1 by interpolation
+fixed_dates = [SetDate; Date1; dates(12:14)];
+Act365 = 3;
+delta_t_fixed = yearfrac(fixed_dates(1:end-1),fixed_dates(2:end),Act365);
+yf_Date1 = yearfrac(SetDate,Date1,Act365);
+discounts_payment_fixed = [1; exp(-interp1(dates,zRates,Date1).*yf_Date1); discounts(12:14)];
+% Compute the forward rates (To calculate Brownian Motion dynamics)
+r_fwd = -log(discounts_payment_fixed(2:end)./discounts_payment_fixed(1:end-1))./delta_t_fixed;
+
+% Find the discount factors for the "floating leg"
+floating_dates = [SetDate finddates(SetDate,3:3:48,1)]';
+Act360 = 2;
+delta_t_floating = yearfrac(floating_dates(1:end-1),floating_dates(2:end),Act360); % Act/360 (See Swap Termsheet)
+yf_floating = yearfrac(SetDate,floating_dates(2:end),Act360);
+discounts_payment_floating = [exp(-interp1(dates,zRates,floating_dates(2:end)).*yf_floating)];
+
+%% 1. Case Study: Certificate Price
+
+% PARAMETERS
+
+spol = 100e-4;
+upfront = 0.02;
+rho = 0.4;
+sigma_1 = 0.161;
+sigma_2 = 0.2;
+d_ENEL = 0.025;
+d_AXA = 0.027;
+E1_start = 100;
+E2_start = 200;
+P = 0.95;
+
+% MONTECARLO SIMULATION
+% Number of simulations
+N = 1e5;
+
+% Generate correlated standard normal rv's (correlated)
+rng('default')
+sigma = [1 rho; rho 1];
+A = chol(sigma, 'lower');
+g = randn(length(delta_t_fixed)*N, 2) * A;
+
+g1 = g(:,1);
+g2 = g(:,2);
+
+
+E1 = zeros(N,length(delta_t_fixed)+1);
+E2 = zeros(N,length(delta_t_fixed)+1);
+
+E1(:,1) = E1_start;
+E2(:,1) = E2_start;
+
+k=0;
+for ii=1:length(delta_t_fixed)
+    E1(:,ii+1) = E1(:,ii).*exp( (r_fwd(ii) - d_ENEL - 0.5*(sigma_1^2))*delta_t_fixed(ii) - sigma_1*sqrt(delta_t_fixed(ii))*g1( (k*N+1) : ((k+1)*N) ) );
+    E2(:,ii+1) = E2(:,ii).*exp( (r_fwd(ii) - d_AXA - 0.5*(sigma_2^2))*delta_t_fixed(ii) - sigma_2*sqrt(delta_t_fixed(ii))*g2( (k*N+1) : ((k+1)*N) ) );
+    k=k+1;
+end
+
+% Computation of the basket as indicated in the Swap termsheet
+S = sum( 1/2 *(E1(:,2:end)./E1(:,1:end-1) + E2(:,2:end)./E2(:,1:end-1)), 2 );
+performance = max(S-P,0);
+
+performance = mean(performance);
+
+% Find the participation coefficient (NPV fixed = NPV floating)
+
+eqn = @(x) upfront + discounts_payment_fixed(end)*x*performance + discounts_payment_floating(end)*1 - ...
+1- discounts_payment_floating(end)*(1-P) - sum(spol*discounts_payment_floating.*delta_t_floating);
+
+alpha=fzero(eqn, 0);
