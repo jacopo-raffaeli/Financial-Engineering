@@ -4,4 +4,3 @@ This repository contains the projects proposed and developed during the Financia
 - LabRM Folders: These folders contain projects related to risk management.
 - LabEPFL Folders: These folders encompass projects on electricity price and load forecasting models.
 
-Each folder contains detailed documentation and code implementations for the respective projects.
