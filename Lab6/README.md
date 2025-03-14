@@ -1,48 +1,48 @@
 # Financial Engineering - Assignment 6
 
-**Introduction**
+### **Exercise 0: Introduction**
 
-This assignment involved the analysis and hedging of a structured bond issued by Bank XX on February 16, 2024. The main tasks included:
+This assignment focuses on analyzing and hedging a **structured bond** issued by Bank XX on **Feb 16, 2024**. Key tasks:
 
-- Bootstrapping market discounts to construct swap rates.
-- Calculating the upfront pricing and spot volatilities.
-- Determining risk measures such as Delta-bucket sensitivities and total Vega.
-- Implementing Delta and Vega hedging strategies using swaps and caps.
+- **Bootstrapping discounts** for swap rates.
+- **Upfront pricing** and **spot volatilities** calculation.
+- **Risk measures:** Delta-bucket sensitivities & total Vega.
+- **Hedging strategies:** Delta & Vega hedging with swaps and caps.
 
-**Bootstrap**
+### **Exercise 1: Bootstrap**
 
-To derive market discounts for February 16, 2024, we created a full set of swap rates using spline interpolation on mid rates. We then bootstrapped these rates to obtain the necessary discount factors. The resulting curve showed a descending trend, indicating market expectations of future rate normalization.
+Market discounts were bootstrapped via **spline interpolation** on mid rates. The discount curve showed a **descending trend**, signaling expected **rate normalization**.
 
-**Upfront**
+### **Exercise 2: Upfront Pricing**
 
-Caplet spot volatilities were computed by assuming uniform flat volatilities for periods under one year. An iterative procedure was used to determine the spot volatilities for subsequent years. The upfront value of the structured bond was determined by calculating the Net Present Value of cash flows, focusing on fixed spreads and caps due to the offsetting nature of Euribor payments.
+**Caplet spot volatilities** were computed with flat assumptions (<1 year) and an iterative approach for longer periods. **Net Present Value (NPV)** of cash flows was calculated, considering **fixed spreads** and **caps**.
 
-**Delta-Bucket Sensitivities**
+### **Exercise 3: Delta-Bucket Sensitivities**
 
-Delta-bucket sensitivities were calculated by shifting deposits, futures, and swaps by 1 basis point and updating the upfront values accordingly. DV01 (Delta value for 1 basis point shift) was determined as the difference between the updated and original upfront values.
+Sensitivities were determined by shifting **deposits, futures, swaps** by **1 bp**, recalculating upfront values, and computing **DV01** as the difference.
 
-**Total Vega**
+### **Exercise 4: Total Vega**
 
-Total Vega was computed by incrementing the entire flat volatilities matrix by 1 basis point to generate a new spot volatility surface. The total Vega was then calculated as the difference between the new and original upfront values.
+**Vega** was computed by increasing the entire volatility matrix by **1 bp** and calculating the upfront value change.
 
-**Vega-Bucket Sensitivities**
+### **Exercise 5: Vega-Bucket Sensitivities**
 
-Vega-bucket sensitivities were determined similarly to Delta-bucket sensitivities. Each volatility in the flat volatilities matrix was increased by 1 basis point, and the corresponding new upfront values were computed. The sum of the Vega-bucket sensitivities was verified against the total Vega.
+For each matrix element, volatilities were shifted by **1 bp**, and new upfront values were computed. **Total Vega** was verified as the sum of bucket sensitivities.
 
-**Course-Grained Buckets Delta Hedge**
+### **Exercise 6: Coarse-Grained Buckets Delta Hedge**
 
-Course-grained bucket sensitivities were calculated for four periods: 0-2 years, 2-5 years, 5-10 years, and 10-15 years. Using linear interpolation, weights were assigned to simplify the calculations. Delta hedging was performed based on these course-grained buckets, determining the appropriate swap notionals to hedge the portfolio's delta risk.
+Buckets: **0-2y, 2-5y, 5-10y, 10-15y**. Using **linear interpolation**, swap notionals were determined to **hedge delta risk**.
 
-**Vega Hedge**
+### **Exercise 7: Vega Hedge**
 
-To hedge the total Vega, an ATM 5-year cap was used. The new portfolio, consisting of the structured product and the 5-year cap, was then Delta-hedged using the same methodology as before. The notionals for the cap and the swaps were adjusted to manage the Vega risk.
+A **5y ATM cap** was added to hedge **Vega risk**, followed by **Delta hedging**. Notionals were adjusted to balance the portfolio.
 
-**Course-Grained Buckets Vega Hedge**
+### **Exercise 8: Coarse-Grained Buckets Vega Hedge**
 
-Vega hedging was approached using different buckets: 0-5 years and 5-15 years. A new spot volatility surface was calculated for these buckets, and Vega was hedged using the corresponding flows.
+Buckets: **0-5y, 5-15y**. A new **volatility surface** was calculated, and flows were adjusted to hedge **Vega**.
 
-**Notes & Issues**
+### **Notes & Issues**
 
-1. **Flat Volatility Surface Misinterpretation**: An error occurred by including volatilities at 18 months, which were to be excluded. This oversight impacted multiple parts of the code but did not significantly alter the final results.
+1. **Volatility Surface Error:** Including **18-month volatilities** mistakenly affected results, but with minimal impact.
+2. **Slow Spot Volatility Bootstrap:** **60-date calibration** slowed bootstrapping; a hybrid approach could improve efficiency.
 
-2. **Time-Consuming Spot Volatility Bootstrap**: Bootstrapping the spot volatilities was time-intensive due to calibrating on 60 dates. A more efficient method would involve calibrating on fewer dates and then bootstrapping the remaining dates.
