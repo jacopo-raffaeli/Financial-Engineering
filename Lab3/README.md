@@ -1,17 +1,31 @@
 # Financial Engineering - Assignment 3
 
-This assignment focuses on computing discount factors, analyzing credit default swap (CDS) spreads, and pricing a First to Default (FTD) contract using a Gaussian copula model. The tasks enhance the understanding of advanced financial modeling techniques.
+This assignment focuses on analyzing **credit default swap (CDS) spreads**, and pricing a **First to Default (FTD) contract** using a Gaussian copula model.
 
-### Exercise 1
+### Exercise 1: Discount Factor Computation
 
-Using discounts obtained from the bootstrap method on 15th February 2008 at 10:45 C.E.T., the discount at 1 year is computed through interpolation. The vector of asset swap (ASW) discounts for 1y, 2y, and 3y is constructed. With this data, the price of a risk-free coupon bond is computed, and the asset swap spread is determined using the given formula. The result obtained is -0.3510.
+Using discount factors obtained in **Lab 2**, this exercise involves:
 
-### Exercise 2
+- **1-year discount factor interpolation:** Estimating the discount at 1 year via interpolation.
+- **Asset swap (ASW) discount curve construction:** Building a discount vector for maturities of 1, 2, and 3 years.
+- **Coupon bond pricing:** Computing the price of a risk-free coupon bond.
+- **ASW spread calculation:** Determining the asset swap spread using the given formula, yielding a result of **-0.3510**.
 
-A complete set of CDS spreads and dates is created using spline interpolation, resulting in CDS spreads for various dates from 2009 to 2015. Using these CDS spreads, a bootstrap method computes survival probabilities and piecewise constant hazard rates (λ) for each time step, both neglecting and considering the accrual term, as well as using the Jarrow-Turnbull (JT) approximation. The survival probabilities and intensities from the approximate and exact methods show negligible differences. Similarly, the comparison between the exact method and the JT approximation indicates minor differences.
+### Exercise 2: CDS Spread and Survival Probability Analysis
 
-### Exercise 3
+This exercise involves building a complete set of **CDS spreads** and computing survival probabilities:
 
-A complete set of CDS spreads and dates is created using spline interpolation for the obligor UCG, resulting in CDS spreads for various dates from 2009 to 2015. Survival probabilities for UCG are computed using the approximation that neglects the accrual term. The price of a First To Default (FTD) contract with UCG and ISP as observed obligors is calculated using the Li model and a Gaussian copula. This involves simulating Gaussian random variables, generating correlated Gaussian variables, and computing default times through reverse interpolation of survival probabilities.
+- **Spline interpolation of CDS spreads:** Generating spreads for various dates.
+- **Bootstrap of survival probabilities:** Deriving survival probabilities and **piecewise constant hazard rates**.
+- **Accrual and Jarrow-Turnbull adjustments:** Computing hazard rates with and without accrual terms, and comparing the results with the JT approximation.
+- **Result comparison**
 
-The mean CDS spread obtained through Monte Carlo (MC) simulation defines the fair price of the FTD contract, resulting in an FTD fee of 85.45 basis points (bp) with a standard deviation of 5.32%. The FTD price is plotted against different values of the correlation coefficient (rho), showing that the FTD fee increases with the absolute value of rho, indicating that higher correlation leads to higher prices due to increased probability of simultaneous defaults.
+### Exercise 3: FTD Contract Pricing
+
+The final exercise focuses on pricing a **FTD contract** using a **Gaussian copula model**:
+
+- **Survival probability computation:** Using the approximation neglecting accrual terms.
+- **Gaussian copula simulation:** Simulating Gaussian random variables and generating **correlated default times** through reverse interpolation.
+- **Monte-Carlo pricing:** Estimating the fair price of the FTD contract with obligors **UCG** and **ISP**, resulting in an **FTD fee of 85.45 bp** with a **5.32% standard deviation**.
+- **Correlation impact analysis:** Plotting the FTD fee against different values of the correlation coefficient.
+
