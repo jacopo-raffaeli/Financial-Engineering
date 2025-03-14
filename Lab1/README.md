@@ -2,8 +2,6 @@
 
 This assignment for the Financial Engineering course at Politecnico Milano focuses on pricing a European Call Option using different market parameters.
 
-The assignment includes:
-
 1. **Option Pricing Methods**:
    - Using the `blkprice` function in Matlab.
    - Cox-Ross-Rubinstein binomial tree approach.
