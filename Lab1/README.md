@@ -1,24 +1,42 @@
 # Financial Engineering - Assignment 1
 
-This assignment for the Financial Engineering course at Politecnico Milano focuses on pricing a European Call Option using different market parameters.
+This assignment focuses on pricing a European Call Option using various market models, analyzing numerical errors, and exploring advanced pricing techniques.
 
-1. **Option Pricing Methods**:
-   - Using the `blkprice` function in Matlab.
-   - Cox-Ross-Rubinstein binomial tree approach.
-   - Monte-Carlo simulation.
+### Exercise 1: Option Pricing Methods
 
-2. **Error Analysis**:
-   - Numerical errors associated with CRR and MC methods.
-   - How these errors scale with the number of intervals or simulations.
+The first task involves pricing a European Call Option using three different approaches:
 
-3. **Barrier Option Pricing**:
-   - Pricing a European Call Option with a barrier using both tree and MC techniques.
-   - Comparison with a closed-form solution 
+- **Black-Scholes model:** Using the `blkprice` function in Matlab to obtain a closed-form solution.
+- **Cox-Ross-Rubinstein (CRR) binomial tree:** Approximating the option price by modeling the price evolution as a binomial tree.
+- **Monte-Carlo (MC) simulation:** Estimating the option price through randomized price paths and averaging the payoffs.
 
-4. **Sensitivity Analysis**:
-   - Analyzing the Vega of the barrier option across a range of underlying prices to study its sensitivity to volatility.
+### Exercise 2: Error Analysis
 
-5. **Advanced Topics**:
-   - Impact of using antithetic variables to reduce MC error.
-   - Pricing Bermudan options with multiple exercise opportunities.
-   - Comparing prices with varying dividend yields.
+Numerical errors arise in the CRR and MC methods due to discretization and randomness. This section involves:
+
+- **Error scaling in CRR:** Studying how the price converges as the number of tree intervals increases.
+- **Error scaling in MC:** Analyzing the impact of the number of simulations on price accuracy and the role of the standard error.
+
+### Exercise 3: Barrier Option Pricing
+
+The third part extends the analysis to a **Barrier Call Option**, priced using:
+
+- **Tree-based methods:** Adapting the CRR model to account for barrier conditions.
+- **Monte-Carlo simulations:** Simulating paths and discarding those that breach the barrier.
+
+Results are compared with a **closed-form solution**, assessing the accuracy and efficiency of each method.
+
+### Exercise 4: Sensitivity Analysis
+
+This section explores the option’s sensitivity to volatility through **Vega analysis**:
+
+- **Vega computation:** Calculating the change in option price with respect to volatility.
+- **Price sensitivity visualization:** Plotting Vega against the underlying price to observe how sensitivity evolves.
+
+### Exercise 5: Advanced Topics
+
+The final section covers more sophisticated techniques and pricing scenarios:
+
+- **Variance reduction in MC:** Implementing **antithetic variables** to reduce Monte-Carlo error.
+- **Bermudan option pricing:** Extending the CRR tree to handle multiple exercise opportunities.
+- **Dividend yield effects:** Pricing options under different dividend yields and comparing results.
